@@ -2,9 +2,9 @@ name: Watcher — Scrape target pages
 
 on:
   schedule:
-    # Every 2 hours — adjust to taste, but don't go below 30min or you'll burn minutes fast
-    - cron: "0 */2 * * *"
-  workflow_dispatch: # allows manual trigger from Actions tab
+    # Every hour — keeps queue fresh for the frequent posting schedule
+    - cron: "0 * * * *"
+  workflow_dispatch:
 
 jobs:
   scrape:
@@ -25,7 +25,11 @@ jobs:
         run: |
           pip install -r requirements.txt
           playwright install chromium
-          playwright install-deps chromium
+          playwright install-deps chromium --dry-run 2>/dev/null || true
+          sudo apt-get install -y \
+            libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 \
+            libcups2 libdrm2 libxkbcommon0 libxcomposite1 \
+            libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2t64
 
       - name: Run watcher
         env:
