@@ -1,0 +1,35 @@
+name: Watcher — Scrape target pages
+
+on:
+  schedule:
+    # Every 2 hours — adjust to taste, but don't go below 30min or you'll burn minutes fast
+    - cron: "0 */2 * * *"
+  workflow_dispatch: # allows manual trigger from Actions tab
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium
+          playwright install-deps chromium
+
+      - name: Run watcher
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          TARGET_PAGES: ${{ secrets.TARGET_PAGES }}
+        run: python pipeline/watcher.py
