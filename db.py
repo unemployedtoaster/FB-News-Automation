@@ -102,3 +102,9 @@ def mark_posted(reel_id: int):
 def mark_skipped(reel_id: int):
     sb = get_client()
     sb.table("reels").update({"status": "skipped"}).eq("id", reel_id).execute()
+
+
+def mark_ready(reel_id: int):
+    """Mark a reel as pre-downloaded and ready to post."""
+    sb = get_client()
+    sb.table("reels").update({"status": "ready"}).eq("id", reel_id).execute()
