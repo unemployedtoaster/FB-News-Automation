@@ -2,9 +2,35 @@ name: Publisher — Post best reel to YouTube
 
 on:
   schedule:
+    # All times UTC+6 (Bangladesh) → subtract 6 for UTC
+    # 7am  BD = 1am  UTC
+    - cron: "0 1 * * *"
+    # 12pm BD = 6am  UTC
+    - cron: "0 6 * * *"
+    # 1pm  BD = 7am  UTC
+    - cron: "0 7 * * *"
+    # 2pm  BD = 8am  UTC
+    - cron: "0 8 * * *"
+    # 3pm  BD = 9am  UTC
     - cron: "0 9 * * *"
+    # 4pm  BD = 10am UTC
+    - cron: "0 10 * * *"
+    # 5pm  BD = 11am UTC
+    - cron: "0 11 * * *"
+    # 6pm  BD = 12pm UTC
+    - cron: "0 12 * * *"
+    # 7pm  BD = 1pm  UTC
+    - cron: "0 13 * * *"
+    # 8pm  BD = 2pm  UTC
     - cron: "0 14 * * *"
-    - cron: "0 19 * * *"
+    # 9pm  BD = 3pm  UTC
+    - cron: "0 15 * * *"
+    # 10pm BD = 4pm  UTC
+    - cron: "0 16 * * *"
+    # 11pm BD = 5pm  UTC
+    - cron: "0 17 * * *"
+    # 12am BD = 6pm  UTC
+    - cron: "0 18 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
