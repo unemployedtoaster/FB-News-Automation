@@ -58,14 +58,23 @@ def download_from_storage(reel_id: int, output_path: str) -> bool:
         return False
 
 
+def clean_url(url: str) -> str:
+    """Strip tracking query params Facebook appends to reel URLs."""
+    return url.split("?")[0].split("&")[0]
+
+
 def download_reel(reel_url: str, output_path: str) -> bool:
+    clean = clean_url(reel_url)
     cmd = [
         "yt-dlp", "--quiet", "--no-warnings",
-        "-f", "mp4", "-o", output_path,
-        "--max-filesize", "100m", "--socket-timeout", "30",
-        reel_url,
+        "-f", "mp4/best",
+        "-o", output_path,
+        "--max-filesize", "100m",
+        "--socket-timeout", "30",
+        "--no-check-certificates",
+        clean,
     ]
-    print(f"[Publisher] Downloading fresh: {reel_url}")
+    print(f"[Publisher] Downloading: {clean}")
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
     if result.returncode != 0:
         print(f"[Publisher] yt-dlp failed:\n{result.stderr}")
