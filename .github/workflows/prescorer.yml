@@ -2,34 +2,19 @@ name: Pre-scorer — Prep best reel before post time
 
 on:
   schedule:
-    # Runs 30 min before each publish time — downloads the winner in advance
-    # 6:30am  BD = 12:30am UTC
     - cron: "30 0 * * *"
-    # 11:30am BD = 5:30am  UTC
     - cron: "30 5 * * *"
-    # 12:30pm BD = 6:30am  UTC
     - cron: "30 6 * * *"
-    # 1:30pm  BD = 7:30am  UTC
     - cron: "30 7 * * *"
-    # 2:30pm  BD = 8:30am  UTC
     - cron: "30 8 * * *"
-    # 3:30pm  BD = 9:30am  UTC
     - cron: "30 9 * * *"
-    # 4:30pm  BD = 10:30am UTC
     - cron: "30 10 * * *"
-    # 5:30pm  BD = 11:30am UTC
     - cron: "30 11 * * *"
-    # 6:30pm  BD = 12:30pm UTC
     - cron: "30 12 * * *"
-    # 7:30pm  BD = 1:30pm  UTC
     - cron: "30 13 * * *"
-    # 8:30pm  BD = 2:30pm  UTC
     - cron: "30 14 * * *"
-    # 9:30pm  BD = 3:30pm  UTC
     - cron: "30 15 * * *"
-    # 10:30pm BD = 4:30pm  UTC
     - cron: "30 16 * * *"
-    # 11:30pm BD = 5:30pm  UTC
     - cron: "30 17 * * *"
   workflow_dispatch:
 
@@ -49,10 +34,16 @@ jobs:
           cache: "pip"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt yt-dlp
+        run: |
+          pip install -r requirements.txt
+          pip install -U yt-dlp
 
       - name: Run pre-scorer
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
         run: python prescorer.py
