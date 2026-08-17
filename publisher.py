@@ -129,7 +129,7 @@ def enhance_quality(input_path: str, output_path: str) -> bool:
     cmd = [
         "ffmpeg", "-y", "-i", input_path,
         "-vf", "scale='if(gt(iw,1920),1920,iw)':'if(gt(ih,1080),1080,ih)':flags=lanczos",
-        "-c:v", "libx264", "-crf", "18", "-preset", "slow",
+        "-c:v", "libx264", "-crf", "18", "-preset", "fast",
         "-c:a", "aac", "-b:a", "192k",
         "-movflags", "+faststart",
         output_path,
@@ -146,8 +146,9 @@ def letterbox_to_9x16(input_path: str, output_path: str) -> bool:
     """Pad video to 9:16 with black bars, keeping original content untouched."""
     cmd = [
         "ffmpeg", "-y", "-i", input_path,
-        "-vf", "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black",
-        "-c:v", "libx264", "-crf", "18", "-preset", "slow",
+        "-vf", "scale=w=1080:h=1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black,setsar=1",
+        "-t", "179",  # trim to 2:59 max for Shorts
+        "-c:v", "libx264", "-crf", "18", "-preset", "fast",
         "-c:a", "aac", "-b:a", "192k",
         "-movflags", "+faststart",
         output_path,
